@@ -12,8 +12,14 @@
 <section class="page-heading">
   <h1>{{ currentCategoryTitle() }} 🌷</h1>
   <p>
-    Chọn những bó hoa tươi xinh đẹp, chất lượng nhất dành cho người bạn yêu thương.
+    Chọn những bó hoa tươi xinh đẹp kết nối trực tiếp từ MongoDB API.
   </p>
+  @if (searchQuery()) {
+    <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 12px;">
+      <span>Kết quả tìm kiếm cho: <strong>"{{ searchQuery() }}"</strong></span>
+      <button type="button" (click)="clearSearch()" style="border: none; background: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 10px; font-weight: bold; cursor: pointer;">✕ Xóa tìm kiếm</button>
+    </div>
+  }
 </section>
 
 <!-- DANH MUC SCROLL NGANG (Chuyển trang theo Slug) -->
@@ -49,6 +55,16 @@
     <div class="filter-option">
       <input type="radio" id="promotion" name="sort" [checked]="selectedSort() === 'promotion'" (change)="onSelectSort('promotion')">
       <label for="promotion">🏷️ Giảm giá</label>
+    </div>
+
+    <div class="filter-option">
+      <input type="radio" id="price-asc" name="sort" [checked]="selectedSort() === 'price-asc'" (change)="onSelectSort('price-asc')">
+      <label for="price-asc">⬆️ Giá tăng</label>
+    </div>
+
+    <div class="filter-option">
+      <input type="radio" id="price-desc" name="sort" [checked]="selectedSort() === 'price-desc'" (change)="onSelectSort('price-desc')">
+      <label for="price-desc">⬇️ Giá giảm</label>
     </div>
   </div>
 </section>
@@ -88,14 +104,14 @@
             }
           </div>
           <div class="product-actions">
-            <a routerLink="/cart" class="btn-buy">🛒 Mua</a>
+            <button type="button" class="btn-buy" (click)="buyProduct(product)">🛒 Mua</button>
             <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">Chi tiết</a>
           </div>
         </div>
       </article>
       } @empty {
         <p style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #777;">
-          Không có sản phẩm nào thuộc danh mục này.
+          Không có sản phẩm nào phù hợp.
         </p>
       }
     </div>
@@ -105,8 +121,6 @@
 <!-- BANNER -->
 <aside class="promo-banner">
   <h3>🌸 Hoa đẹp mỗi ngày!</h3>
-  <p>
-    Gửi trao yêu thương cùng BHShop.
-  </p>
-  <a routerLink="/products">Liên hệ đặt hoa →</a>
+  <p>Gửi trao yêu thương cùng BHShop.</p>
+  <a routerLink="/">Trang chủ →</a>
 </aside>

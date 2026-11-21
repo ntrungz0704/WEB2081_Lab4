@@ -10,11 +10,20 @@ export const routes: Routes = [
     loadComponent: () => import('./components/products/products').then((m) => m.Products),
   },
   {
+    path: 'bai_viet',
+    loadComponent: () => import('./components/blogs/blogs').then((m) => m.Blogs),
+  },
+  {
+    path: 'blogs',
+    redirectTo: 'bai_viet',
+    pathMatch: 'full',
+  },
+  {
     path: 'category/:slug',
     loadComponent: () => import('./components/products/products').then((m) => m.Products),
   },
   {
-    path: 'product/:id',
+    path: 'product/:slug',
     loadComponent: () => import('./components/product/product').then((m) => m.ProductComponent),
   },
   {

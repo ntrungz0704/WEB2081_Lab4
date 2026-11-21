@@ -58,6 +58,13 @@ exports.getProducts = async (req, res) => {
     }
 
     const products = await productsQuery.exec();
+
+    // Sắp xếp lại theo giá trị số nếu sort theo giá (vì price lưu dạng '350.000đ')
+    if (sort === 'price-asc' || sort === 'price-desc') {
+      const toNum = (p) => parseInt(String(p.price || '').replace(/[^\d]/g, ''), 10) || 0;
+      products.sort((a, b) => sort === 'price-asc' ? toNum(a) - toNum(b) : toNum(b) - toNum(a));
+    }
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: 'Lỗi server khi lấy danh sách sản phẩm', error: error.message });

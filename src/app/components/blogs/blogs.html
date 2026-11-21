@@ -1,0 +1,88 @@
+<div class="blogs-page">
+  <div class="breadcrumb">
+    <a routerLink="/">Trang chủ</a> &gt; <span>Bài viết (/bai_viet)</span>
+  </div>
+
+  <section class="blogs-hero">
+    <div class="hero-badge">📖 TẠP CHÍ HOA TƯƠI BHSHOP</div>
+    <h1>Bài Viết & Cảm Hứng Hoa</h1>
+    <p>Dữ liệu tải động trực tiếp từ MongoDB API (/api/blogs)</p>
+  </section>
+
+  <section class="filter-section">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        placeholder="Tìm kiếm bài viết, mẹo chăm hoa..."
+        [value]="searchQuery()"
+        (input)="onSearchInput($event)">
+    </div>
+
+    <div class="category-chips">
+      @for (cat of categories; track cat.id) {
+        <button
+          type="button"
+          class="chip"
+          [class.active]="selectedCategory() === cat.id"
+          (click)="setCategory(cat.id)">
+          {{ cat.name }}
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="blog-list-section">
+    @if (isLoading()) {
+      <p style="text-align: center; padding: 30px; color: #78716c;">Đang tải bài viết từ MongoDB...</p>
+    } @else {
+      <div class="result-count">Tìm thấy <strong>{{ filteredBlogs().length }}</strong> bài viết</div>
+      <div class="blog-grid">
+        @for (blog of filteredBlogs(); track blog.id) {
+          <article class="blog-card">
+            <div class="blog-image">
+              <img [src]="blog.image" [alt]="blog.title">
+              <span class="blog-tag">{{ blog.category }}</span>
+            </div>
+            <div class="blog-content">
+              <div class="blog-meta">
+                <span>📅 {{ blog.createdAt }}</span>
+                <span>⏱️ {{ blog.readTime }}</span>
+              </div>
+              <h3 class="blog-title">{{ blog.title }}</h3>
+              <p class="blog-summary">{{ blog.summary }}</p>
+              <div class="blog-footer">
+                <span class="blog-author">✍️ {{ blog.author }}</span>
+                <button type="button" class="btn-read" (click)="openDetail(blog)">Đọc chi tiết →</button>
+              </div>
+            </div>
+          </article>
+        } @empty {
+          <div class="empty-state">
+            <p>Không tìm thấy bài viết phù hợp.</p>
+          </div>
+        }
+      </div>
+    }
+  </section>
+
+  @if (selectedBlog()) {
+    @let detail = selectedBlog()!;
+    <div class="blog-modal-backdrop" (click)="closeDetail()">
+      <div class="blog-modal-box" (click)="$event.stopPropagation()">
+        <button type="button" class="modal-close-btn" (click)="closeDetail()">✕</button>
+        <img [src]="detail.image" [alt]="detail.title" class="modal-cover" />
+        <div class="modal-body">
+          <span class="v-tag">{{ detail.category }}</span>
+          <h2>{{ detail.title }}</h2>
+          <div class="blog-meta" style="margin-bottom: 10px;">
+            <span>📅 {{ detail.createdAt }}</span>
+            <span>✍️ {{ detail.author }} • ⏱️ {{ detail.readTime }}</span>
+          </div>
+          <p style="font-weight: 600;">{{ detail.summary }}</p>
+          <p>{{ detail.content }}</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

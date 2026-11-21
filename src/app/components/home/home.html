@@ -1,41 +1,76 @@
-<!-- HERO SLIDER -->
-<section class="slider">
-  <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=900&auto=format&fit=crop" alt="Hoa tươi rực rỡ">
-
-  <div class="slider-content">
-    <h1>Trao hoa tươi, gửi yêu thương</h1>
-    <p>Ưu đãi đặc biệt đến 30%</p>
-    <a routerLink="/products" class="btn-white">
-      Khám phá ngay →
-    </a>
+@if (errorMessage()) {
+  <div style="margin: 14px; padding: 14px; background: #fee2e2; color: #b91c1c; border-radius: 12px; font-size: 12px; text-align: center;">
+    ⚠️ {{ errorMessage() }}
   </div>
+}
 
-  <div class="slider-dots">● ○ ○</div>
-</section>
+<!-- HERO SLIDER (3 BANNER MỚI NHẤT TỪ MONGODB) -->
+@if (currentBanner()) {
+  @let banner = currentBanner()!;
+  <section class="slider">
+    <img [src]="banner.image" [alt]="banner.title">
 
-<!-- SAN PHAM MOI -->
+    <div class="slider-content">
+      <h1>{{ banner.title }}</h1>
+      <p>{{ banner.subtitle }}</p>
+      <a [routerLink]="banner.link || '/products'" class="btn-white">
+        {{ banner.buttonText || 'Khám phá ngay →' }}
+      </a>
+    </div>
+
+    <div class="slider-dots">
+      @for (b of banners(); track b.id; let i = $index) {
+        <button type="button" class="dot-btn" [class.active]="activeBannerIndex() === i" (click)="setBannerIndex(i)">●</button>
+      }
+    </div>
+  </section>
+} @else if (!isLoading()) {
+  <section class="slider">
+    <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=900&auto=format&fit=crop" alt="Hoa tươi rực rỡ">
+    <div class="slider-content">
+      <h1>Trao hoa tươi, gửi yêu thương</h1>
+      <p>Ưu đãi đặc biệt đến 30%</p>
+      <a routerLink="/products" class="btn-white">Khám phá ngay →</a>
+    </div>
+  </section>
+}
+
+<!-- DANH MỤC NHANH (CHUYỂN TRANG /category/:slug) -->
+@if (categories().length > 0) {
+  <section class="home-categories">
+    <div class="cat-strip">
+      @for (cat of categories(); track cat.id) {
+        <a [routerLink]="cat.slug === 'tat-ca' ? '/products' : ['/category', cat.slug]" class="cat-pill">
+          {{ cat.icon }} {{ cat.name }}
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<!-- SECTION 1: HOA TƯƠI MỚI -->
 <section class="section" id="new">
   <div class="section-heading">
     <h2>🌷 Hoa tươi mới</h2>
     <a routerLink="/products">Xem tất cả →</a>
   </div>
-  <p class="subtitle">
-    Những bó hoa xinh xắn vừa cập bến
-  </p>
+  <p class="subtitle">Dữ liệu lấy trực tiếp từ MongoDB API (/api/home)</p>
 
   <div class="product-grid">
     @for (product of newProducts(); track product.id) {
     <article class="product-card">
       <div class="product-image">
         <img [src]="product.image" [alt]="product.name">
-        <span class="label {{ product.badgeClass }}">{{ product.badge }}</span>
+        @if (product.badge) {
+          <span class="label {{ product.badgeClass }}">{{ product.badge }}</span>
+        }
       </div>
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
         <div class="price">{{ product.price }}</div>
-        <div class="old-price">{{ product.oldPrice }}</div>
+        <div class="old-price">{{ product.oldPrice !== '-' ? product.oldPrice : '&nbsp;' }}</div>
         <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy"> Mua</a>
+          <button type="button" class="btn-buy" (click)="buyProduct(product)">🛒 Mua</button>
           <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">Chi tiết</a>
         </div>
       </div>
@@ -44,104 +79,115 @@
   </div>
 </section>
 
-<!-- BANNER 1 -->
+<!-- SECTION 2: HOA BÁN CHẠY -->
+<section class="section" id="bestseller">
+  <div class="section-heading">
+    <h2>🏆 Hoa bán chạy</h2>
+    <a routerLink="/products">Xem tất cả →</a>
+  </div>
+  <p class="subtitle">Top mẫu hoa được đặt nhiều nhất tại BHShop</p>
+
+  <div class="product-grid">
+    @for (product of bestSellingProducts(); track product.id) {
+    <article class="product-card">
+      <div class="product-image">
+        <img [src]="product.image" [alt]="product.name">
+        <span class="label label-new">Đã bán {{ product.sold }}</span>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="price">{{ product.price }}</div>
+        <div class="old-price">{{ product.oldPrice !== '-' ? product.oldPrice : '&nbsp;' }}</div>
+        <div class="product-actions">
+          <button type="button" class="btn-buy" (click)="buyProduct(product)">🛒 Mua</button>
+          <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">Chi tiết</a>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+</section>
+
+<!-- BANNER QUẢNG CÁO -->
 <aside class="promo-banner">
-  <img src="https://images.unsplash.com/photo-1494336934272-f0efcedfc8a9?w=900&auto=format&fit=crop"
-    alt="Ưu đãi hoa tươi">
+  <img src="https://images.unsplash.com/photo-1494336934272-f0efcedfc8a9?w=900&auto=format&fit=crop" alt="Ưu đãi hoa tươi">
   <div class="promo-content">
     <h3>Một bó hoa, ngàn lời yêu</h3>
     <p>Miễn phí thiệp chúc mừng</p>
-    <a routerLink="/products" class="btn-white">
-      Mua ngay →
-    </a>
+    <a routerLink="/products" class="btn-white">Mua ngay →</a>
   </div>
 </aside>
 
-<!-- SAN PHAM KHUYEN MAI -->
+<!-- SECTION 3: HOA KHUYẾN MÃI -->
 <section class="section" id="sale">
   <div class="section-heading">
     <h2>🔥 Ưu đãi hôm nay</h2>
     <a routerLink="/products">Xem tất cả →</a>
   </div>
-  <p class="subtitle">
-    Hoa đẹp giá tốt, số lượng có hạn
-  </p>
-
+  <p class="subtitle">Hoa đẹp giá tốt, số lượng có hạn</p>
 
   <div class="product-grid">
     @for (product of saleProducts(); track product.id) {
     <article class="product-card">
-
       <div class="product-image">
         <img [src]="product.image" [alt]="product.name">
-
         @if (product.discount > 0) {
-        <span class="label label-sale">
-          -{{ product.discount }}%
-        </span>
+          <span class="label label-sale">-{{ product.discount }}%</span>
         }
       </div>
-
       <div class="product-info">
-        <h3 class="product-name">
-          {{ product.name }}
-        </h3>
-
-        <div class="price">
-          {{ product.price }}
-        </div>
-
-        @if (product.discount > 0) {
+        <h3 class="product-name">{{ product.name }}</h3>
+        <div class="price">{{ product.price }}</div>
         <div class="old-price">
-          {{ product.oldPrice }}
+          @if (product.discount > 0) { {{ product.oldPrice }} } @else { &nbsp; }
         </div>
-        }
-
         <div class="product-actions">
-          <a routerLink="/cart" class="btn-buy">
-            Mua
-          </a>
-
-          <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">
-            Chi tiết
-          </a>
+          <button type="button" class="btn-buy" (click)="buyProduct(product)">🛒 Mua</button>
+          <a [routerLink]="['/product', product.slug || product.id]" class="btn-detail">Chi tiết</a>
         </div>
       </div>
-
     </article>
     } @empty {
-    <p>Hiện chưa có sản phẩm khuyến mãi.</p>
+      <p>Hiện chưa có sản phẩm khuyến mãi.</p>
     }
   </div>
-
-
 </section>
 
-<!-- BANNER 2 -->
-<aside class="promo-banner">
-  <img src="https://images.unsplash.com/photo-1562690868-60bbe7293e94?w=900&auto=format&fit=crop"
-    alt="Dịch vụ giao hoa">
-  <div class="promo-content">
-    <h3>Hoa tươi trao tận tay</h3>
-    <p>Giao nhanh, gói hoa chỉn chu</p>
-    <a routerLink="/products" class="btn-white">
-      Liên hệ ngay →
-    </a>
+<!-- SECTION 4: BÀI VIẾT MỚI NHẤT -->
+<section class="section" id="blogs">
+  <div class="section-heading">
+    <h2>📖 Bài viết mới nhất</h2>
+    <a routerLink="/bai_viet">Xem tất cả →</a>
   </div>
-</aside>
+  <p class="subtitle">Kinh nghiệm chăm hoa & cảm hứng cắm hoa nghệ thuật</p>
+
+  <div class="blog-grid">
+    @for (blog of latestBlogs(); track blog.id) {
+    <article class="blog-card">
+      <div class="blog-image">
+        <img [src]="blog.image" [alt]="blog.title">
+        <span class="blog-tag">{{ blog.category }}</span>
+      </div>
+      <div class="blog-info">
+        <div class="blog-meta">
+          <span>📅 {{ blog.createdAt }}</span>
+          <span>⏱️ {{ blog.readTime }}</span>
+        </div>
+        <h3 class="blog-title">{{ blog.title }}</h3>
+        <p class="blog-summary">{{ blog.summary }}</p>
+        <div class="blog-footer">
+          <span class="blog-author">✍️ {{ blog.author }}</span>
+          <a routerLink="/bai_viet" class="btn-read-more">Đọc tiếp →</a>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+</section>
 
 <!-- CAM KET -->
 <section class="features">
-  <div class="feature">
-    <span>🌸</span>
-    Hoa tươi<br>mỗi ngày
-  </div>
-  <div class="feature">
-    <span>🚚</span>
-    Giao hoa<br>tận nơi
-  </div>
-  <div class="feature">
-    <span>🎁</span>
-    Gói quà<br>tinh tế
-  </div>
+  <div class="feature"><span>🌸</span>Hoa tươi<br>mỗi ngày</div>
+  <div class="feature"><span>🚚</span>Giao hoa<br>tận nơi</div>
+  <div class="feature"><span>🎁</span>Gói quà<br>tinh tế</div>
 </section>

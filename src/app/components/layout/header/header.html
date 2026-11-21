@@ -5,11 +5,19 @@
     </a>
     <a routerLink="/cart" class="cart" aria-label="Giỏ hàng">
       🛒
+      @if (cartService.totalCount() > 0) {
+        <span class="cart-badge">{{ cartService.totalCount() }}</span>
+      }
     </a>
   </div>
 
-  <form class="search" action="#" (submit)="$event.preventDefault()">
-    <input type="search" placeholder="Tìm bó hoa bạn yêu thích...">
+  <form class="search" (submit)="onSearchSubmit($event)">
+    <input
+      type="search"
+      placeholder="Tìm bó hoa bạn yêu thích (VD: Hồng, Pastel...)"
+      [value]="searchKeyword()"
+      (input)="onSearchInput($event)">
+    <button type="submit" class="search-btn" aria-label="Tìm kiếm">🔍</button>
   </form>
 </header>
 
@@ -28,8 +36,18 @@
   </a>
 
   <a
+    routerLink="/bai_viet"
+    routerLinkActive="active">
+    Bài viết
+  </a>
+
+  <a
     routerLink="/cart"
     routerLinkActive="active">
-    Giỏ hàng
+    Giỏ hàng ({{ cartService.totalCount() }})
   </a>
 </nav>
+
+@if (cartService.toastMessage()) {
+  <div class="toast-banner">✅ {{ cartService.toastMessage() }}</div>
+}

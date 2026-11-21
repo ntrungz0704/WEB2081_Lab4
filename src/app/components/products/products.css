@@ -160,6 +160,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+  align-items: stretch;
 }
 
 .product-card {
@@ -170,6 +171,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .product-image {
@@ -264,6 +266,8 @@
 .btn-buy {
   background: var(--orange);
   color: white;
+  border: none;
+  cursor: pointer;
 }
 
 .btn-detail {

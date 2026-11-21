@@ -1,0 +1,270 @@
+.breadcrumb {
+  padding: 14px 14px 6px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.breadcrumb a {
+  color: var(--orange-dark);
+  font-weight: 600;
+}
+
+.blogs-page {
+  padding-bottom: 24px;
+}
+
+.blogs-hero {
+  margin: 4px 14px 14px;
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 65%, #fdba74 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 18px 16px;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+
+.blogs-hero h1 {
+  font-size: 20px;
+  margin: 0 0 6px;
+}
+
+.blogs-hero p {
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.95;
+}
+
+.filter-section {
+  padding: 0 14px 10px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #fed7aa;
+  border-radius: 25px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+}
+
+.search-icon {
+  margin-right: 8px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  background: transparent;
+}
+
+.category-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+
+.category-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip.active {
+  background: #ea580c;
+  color: white;
+  border-color: #ea580c;
+}
+
+.blog-list-section {
+  padding: 6px 14px 16px;
+}
+
+.result-count {
+  font-size: 11px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.blog-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.blog-card {
+  background: white;
+  border: 1px solid #fed7aa;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.blog-image {
+  position: relative;
+  width: 100%;
+  height: 155px;
+}
+
+.blog-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blog-tag, .v-tag {
+  background: rgba(234, 88, 12, 0.92);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.blog-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.blog-content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.blog-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.blog-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+
+.blog-summary {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.blog-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed #f1f5f9;
+}
+
+.blog-author {
+  font-size: 11px;
+  color: #475569;
+}
+
+.btn-read {
+  background: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 28px;
+  background: white;
+  border-radius: 14px;
+  border: 1px dashed #cbd5e1;
+}
+
+.blog-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+}
+
+.blog-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.modal-body h2 {
+  font-size: 17px;
+  margin: 8px 0;
+  color: #0f172a;
+}
+
+.modal-body p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #475569;
+  margin: 8px 0;
+}
